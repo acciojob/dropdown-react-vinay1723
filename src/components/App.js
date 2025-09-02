@@ -141,11 +141,82 @@ const states = [{
 function App() 
 {
 	// Do not alter/remove main div
-	return (
-	<div id="main">
-		
-	</div>
-	);
+	const [citys, setCity] = useState([]);
+  const [landmarks, setLandmarks] = useState([]);
+  const [selState, setSelecState] = useState({});
+  const [selCity, setSelecCity] = useState({});
+  const [sellandMark, setSelectLandMark] = useState({});
+
+  function handleCities(targetstate) {
+    const state = states[targetstate];
+    if (!state) {
+      setCity([]);
+      setLandmarks([]);
+      return;
+    }
+    setSelecState(state);
+    setCity(state.city);
+    setLandmarks([]);
+  }
+
+  function handleLandMarks(targetcity) {
+    const city = citys[targetcity];
+    if (!city) {
+      setLandmarks([]);
+      return;
+    }
+    setSelecCity(city);
+    setSelectLandMark(city.landmarks);
+    setLandmarks(city.landmarks);
+  }
+
+  return (
+    <div id="main">
+      <select id="state" onChange={(e) => handleCities(Number(e.target.value))}>
+        {states.map((state, index) => (
+          <option key={state.name} value={index}>
+            {state.name}
+          </option>
+        ))}
+      </select>
+
+      {citys.length > 0 && (
+        <select
+          id="city"
+          onChange={(e) => handleLandMarks(Number(e.target.value))}
+        >
+          {citys.map((city, index) => (
+            <option key={city.name} value={index}>
+              {city.name}
+            </option>
+          ))}
+        </select>
+      )}
+
+      {landmarks.length > 0 && (
+        <select
+          id="landmark"
+          onChange={(e) =>
+            setSelectLandMark(selCity.landmarks[Number(e.target.value)])
+          }
+        >
+          {landmarks.map((landmark, index) => (
+            <option key={landmark.name} value={index}>
+              {landmark.name}
+            </option>
+          ))}
+        </select>
+      )}
+      <div id="state-name">{selState.name ?? ""}</div>
+      <div id="state-description">{selState.description ?? ""}</div>
+
+      <div id="city-name">{selCity.name ?? ""}</div>
+      <div id="city-description">{selCity.description ?? ""}</div>
+
+      <div id="landmark-name">{sellandMark.name ?? ""}</div>
+      <div id="landmark-description">{sellandMark.description ?? ""}</div>
+    </div>
+  );
 }
 
 
