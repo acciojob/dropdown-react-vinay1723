@@ -330,13 +330,13 @@ function App() {
       )}
 
       {/* Display Info */}
-      <div id="state-name">{selState.name ?? ""}</div>
+      <div id="state-title">{selState.name ?? ""}</div>
       <div id="state-description">{selState.description ?? ""}</div>
 
-      <div id="city-name">{selCity.name ?? ""}</div>
+      <div id="city-title">{selCity.name ?? ""}</div>
       <div id="city-description">{selCity.description ?? ""}</div>
 
-      <div id="landmark-name">{sellandMark.name ?? ""}</div>
+      <div id="landmark-title">{sellandMark.name ?? ""}</div>
       <div id="landmark-description">{sellandMark.description ?? ""}</div>
     </div>
   );
