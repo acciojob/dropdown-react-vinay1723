@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./../styles/App.css";
 
 const states = [
@@ -218,9 +218,6 @@ const states = [
     ],
   },
 ];
-
-import React, { useState, useEffect } from "react";
-import "./../styles/App.css";
 
 function App() {
   // state setup
