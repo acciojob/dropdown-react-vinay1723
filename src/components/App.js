@@ -219,14 +219,18 @@ const states = [
   },
 ];
 
+import React, { useState, useEffect } from "react";
+import "./../styles/App.css";
+
 function App() {
-  // Do not alter/remove main div
+  // state setup
   const [citys, setCity] = useState([]);
   const [landmarks, setLandmarks] = useState([]);
   const [selState, setSelecState] = useState({});
   const [selCity, setSelecCity] = useState({});
   const [sellandMark, setSelectLandMark] = useState({});
 
+  // 🔹 Auto-select defaults on first render
   useEffect(() => {
     if (states.length > 0) {
       const defaultState = states[0];
@@ -247,30 +251,50 @@ function App() {
 
   function handleCities(targetstate) {
     const state = states[targetstate];
-    if (!state) {
-      setCity([]);
-      setLandmarks([]);
-      return;
-    }
+    if (!state) return;
+
     setSelecState(state);
     setCity(state.city);
-    setLandmarks([]);
+
+    if (state.city.length > 0) {
+      const defaultCity = state.city[0];
+      setSelecCity(defaultCity);
+      setLandmarks(defaultCity.landmarks);
+
+      if (defaultCity.landmarks.length > 0) {
+        setSelectLandMark(defaultCity.landmarks[0]);
+      } else {
+        setSelectLandMark({});
+      }
+    } else {
+      setSelecCity({});
+      setLandmarks([]);
+      setSelectLandMark({});
+    }
   }
 
   function handleLandMarks(targetcity) {
     const city = citys[targetcity];
-    if (!city) {
-      setLandmarks([]);
-      return;
-    }
+    if (!city) return;
+
     setSelecCity(city);
-    setSelectLandMark(city.landmarks);
     setLandmarks(city.landmarks);
+
+    if (city.landmarks.length > 0) {
+      setSelectLandMark(city.landmarks[0]);
+    } else {
+      setSelectLandMark({});
+    }
   }
 
   return (
     <div id="main">
-      <select id="state" onChange={(e) => handleCities(Number(e.target.value))}>
+      {/* State dropdown */}
+      <select
+        id="state"
+        value={states.indexOf(selState)} // auto-select
+        onChange={(e) => handleCities(Number(e.target.value))}
+      >
         {states.map((state, index) => (
           <option key={state.name} value={index}>
             {state.name}
@@ -278,9 +302,11 @@ function App() {
         ))}
       </select>
 
+      {/* City dropdown */}
       {citys.length > 0 && (
         <select
           id="city"
+          value={citys.indexOf(selCity)} // auto-select
           onChange={(e) => handleLandMarks(Number(e.target.value))}
         >
           {citys.map((city, index) => (
@@ -291,12 +317,12 @@ function App() {
         </select>
       )}
 
+      {/* Landmark dropdown */}
       {landmarks.length > 0 && (
         <select
           id="landmark"
-          onChange={(e) =>
-            setSelectLandMark(selCity.landmarks[Number(e.target.value)])
-          }
+          value={landmarks.indexOf(sellandMark)} // auto-select
+          onChange={(e) => setSelectLandMark(landmarks[Number(e.target.value)])}
         >
           {landmarks.map((landmark, index) => (
             <option key={landmark.name} value={index}>
@@ -305,6 +331,8 @@ function App() {
           ))}
         </select>
       )}
+
+      {/* Display Info */}
       <div id="state-name">{selState.name ?? ""}</div>
       <div id="state-description">{selState.description ?? ""}</div>
 
